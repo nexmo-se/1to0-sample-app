@@ -25,7 +25,7 @@ The client side is a ReactJS application with three hooks. UsePublisher, useScre
 1. Run `npm install` on the root directory to install dependencies
 2. Populate a `.env.development` file on the server side as per the `.env.example`
 3. Run `npm install` to install dependencies
-4. Run the server by running `node index` within the server folder
+4. Run the server by running `npm run server-dev`
 5. Run the client side by running `npm start`
 
 ## Use the app
