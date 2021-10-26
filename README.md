@@ -22,8 +22,6 @@ The client side is a ReactJS application with three hooks. UsePublisher, useScre
 
 ## Install the app
 
-For now you need to install dependencies separately for the client side and the server side as this is just a starting point application.
-
 1. Run `npm install` on the root directory to install dependencies
 2. Populate a `.env.development` file on the server side as per the `.env.example`
 3. Run `npm install` to install dependencies
@@ -34,15 +32,15 @@ For now you need to install dependencies separately for the client side and the 
 
 In order to use the app you can navigate to http://localhost:3000/room/${roomName} and you will start publishing video from your camera. Note that it's recommended to select the Window or browser tab that you want to share rather than sharing the entire screen. Otherwise, the recording of the screen will also include the picture and picture view and you can see a duplicate video from the camera in the recording. You can select on the pop up menu when you click on the screensharing button.
 
-![Single Pubisher](https://raw.githubusercontent.com/nexmo-se/1to0-sampleapp/main/public/single_publisher.png?token=AK4DSV3OFYMNBSHUOUEGKOLBQEEAQ)
+![Single Pubisher](https://raw.githubusercontent.com/nexmo-se/1to-sample-app/main/public/single_publisher.png?token=AK4DSV6LVPP3DO3U7VMWANTBQE42C)
 
 You can then either start the recording or start screensharing. When you hit on the screensharing button, the video from the camera will transition to picture and picture mode where you can also toggle audio and video without coming back to the web application tab when you hover over the picture and picture element.
 
-![Picture and picture view](https://raw.githubusercontent.com/nexmo-se/1to0-sampleapp/main/public/picture_and_picture_view.png?token=AK4DSV5KN4QQG5PYS4UDBFDBQEENW)
+![Picture and picture view](https://raw.githubusercontent.com/nexmo-se/1to-sample-app/main/public/picture_and_picture_view.png?token=AK4DSVZT4EM5PK3QXMGXKDDBQE4U2)
 
 This is the view of the user while sharing their screen
-![Screensharing view](https://raw.githubusercontent.com/nexmo-se/1to0-sampleapp/main/public/screensharing_View.png?token=AK4DSVZ25HLP2L3YJFDM653BQEFK4)
+![Screensharing view](https://raw.githubusercontent.com/nexmo-se/1to-sample-app/main/public/screensharing_View.png?token=AK4DSV2RCV32YSYYEMVMUVDBQE436)
 
 This is what the recording from our server looks like
 
-![Recording view](https://raw.githubusercontent.com/nexmo-se/1to0-sampleapp/main/public/recordingview.png?token=AK4DSV56JEK2EBEJOVOR2LDBQEGT6)
+![Recording view](https://raw.githubusercontent.com/nexmo-se/1to-sample-app/main/public/recordingview.png?token=AK4DSVZOGO5REHYPQRALKSTBQE4YI)
