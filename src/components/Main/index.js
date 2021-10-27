@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useParams } from 'react-router';
 
 import { usePublisher } from '../../hooks/usePublisher';
@@ -12,7 +12,7 @@ import ToolBar from '../ToolBar';
 
 function Main() {
   const videoContainer = useRef();
-
+  const [publishing, setIsPublishing] = useState(false);
   const [hasAudio, setHasAudio] = useState(true);
   const [hasVideo, setHasVideo] = useState(true);
   // const { startAnnotation, informAnnotation, end, hasAnnotation } =
@@ -36,25 +36,45 @@ function Main() {
     unpublish,
   } = useScreenSharing();
 
-  const handleAudioChange = () => {
+  const handleAudioChange = useCallback(() => {
     if (hasAudio) {
       publisher.publishAudio(false);
       setHasAudio(false);
+      try {
+        navigator.mediaSession.setMicrophoneActive(false);
+      } catch (e) {
+        console.log(e);
+      }
     } else {
       publisher.publishAudio(true);
       setHasAudio(true);
+      try {
+        navigator.mediaSession.setMicrophoneActive(true);
+      } catch (e) {
+        console.log(e);
+      }
     }
-  };
+  }, [hasAudio, publisher]);
 
-  const handleVideoChange = () => {
+  const handleVideoChange = useCallback(() => {
     if (hasVideo) {
       publisher.publishVideo(false);
       setHasVideo(false);
+      try {
+        navigator.mediaSession.setCameraActive(false);
+      } catch (e) {
+        console.log(e);
+      }
     } else {
       publisher.publishVideo(true);
       setHasVideo(true);
+      try {
+        navigator.mediaSession.setCameraActive(true);
+      } catch (e) {
+        console.log(e);
+      }
     }
-  };
+  }, [hasVideo, publisher]);
 
   useEffect(() => {
     getCredentials(roomName)
@@ -89,6 +109,31 @@ function Main() {
     }
   }, [createSession, credentials]);
 
+  useEffect(() => {
+    if (publishing) {
+      const actionHandlers = [
+        // play
+        ['togglecamera', handleVideoChange],
+        ['togglemicrophone', handleAudioChange],
+      ];
+      if ('mediaSession' in navigator) {
+        for (const [action, handler] of actionHandlers) {
+          try {
+            navigator.mediaSession.setActionHandler(action, handler);
+          } catch (error) {
+            console.log(
+              `The media session action "${action}" is not supported yet.`
+            );
+          }
+        }
+      } else {
+        alert(
+          'media session is not supported in your browser. Please use Chrome'
+        );
+      }
+    }
+  }, [handleAudioChange, handleVideoChange, publishing]);
+
   //   useEffect(() => {
   //     console.log(streams);
   //     if (streams.length > 0) {
@@ -106,67 +151,22 @@ function Main() {
     }
   }, [isPublishingScreen, credentials]);
 
-  const actionHandlers = [
-    // play
-    [
-      'togglecamera',
-      () => {
-        if (hasVideo) {
-          console.log('turning off video');
-          publisher.publishVideo(false);
-          setHasVideo(false);
-          navigator.mediaSession.setCameraActive(false);
-        } else {
-          console.log('turning on video');
-          publisher.publishVideo(true);
-          setHasVideo(true);
-          navigator.mediaSession.setCameraActive(true);
-        }
-      },
-    ],
-    [
-      'togglemicrophone',
-      () => {
-        if (hasAudio) {
-          console.log('turning off video');
-          publisher.publishAudio(false);
-          setHasAudio(false);
-          navigator.mediaSession.setMicrophoneActive(false);
-        } else {
-          console.log('turning on video');
-          publisher.publishAudio(true);
-          setHasAudio(true);
-          navigator.mediaSession.setMicrophoneActive(true);
-        }
-      },
-    ],
-  ];
-  if ('mediaSession' in navigator) {
-    for (const [action, handler] of actionHandlers) {
-      try {
-        navigator.mediaSession.setActionHandler(action, handler);
-      } catch (error) {
-        console.log(
-          `The media session action "${action}" is not supported yet.`
-        );
-      }
-    }
-  }
-
   const handleScreen = async () => {
     if (!isPublishingScreen) {
       publishScreen({
         session: session.current,
         containerId: screenContainer.current.id,
       });
-      if ('mediaSession' in navigator) {
-        try {
+      try {
+        if (document.pictureInPictureEnabled) {
           await document.querySelectorAll('video')[0].requestPictureInPicture();
-          navigator.mediaSession.setMicrophoneActive(true);
-          navigator.mediaSession.setCameraActive(true);
-        } catch (e) {
-          console.log(e);
+        } else {
+          console.log('Your browser cannot use picture-in-picture right now');
         }
+        navigator.mediaSession.setMicrophoneActive(hasAudio);
+        navigator.mediaSession.setCameraActive(hasVideo);
+      } catch (e) {
+        console.log(e);
       }
     } else {
       destroyPublisher();
@@ -184,6 +184,7 @@ function Main() {
         session: session.current,
         containerId: videoContainer.current.id,
       });
+      setIsPublishing(true);
     }
   }, [publish, session, connected, pubInitialised]);
 
