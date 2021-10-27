@@ -46,7 +46,7 @@ app.post('/stream', async (req, res) => {
     console.log(resp);
     res.status(200);
   } catch (e) {
-    console.log(e);
+    console.log('Error setting layout classes' + e);
     res.status(500);
   }
 });

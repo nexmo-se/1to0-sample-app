@@ -26,6 +26,7 @@ const createSessionandToken = () => {
 };
 
 const createArchive = (session) => {
+  console.log('Creating archive');
   return new Promise((resolve, reject) => {
     opentok.startArchive(
       session,
@@ -63,6 +64,7 @@ const stopArchive = (archive) => {
 
 //tODO
 const setLayoutClasses = async (sessionId) => {
+  console.log('Setting layoutclasses');
   const emptyStreamsArray = [];
   try {
     const resp = await listStreams(sessionId);
@@ -92,14 +94,17 @@ const setLayoutClasses = async (sessionId) => {
       );
     });
   } catch (e) {
-    console.log(e);
+    console.log('Error setting classes for streams' + e);
   }
 };
 
 const listStreams = (sessionId) => {
   return new Promise((res, rej) => {
     opentok.listStreams(sessionId, function (err, resp) {
-      if (err) rej(err);
+      if (err) {
+        console.log('error listing streams' + err);
+        rej(err);
+      }
       res(resp);
     });
   });
