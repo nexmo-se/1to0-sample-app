@@ -32,6 +32,7 @@ export function usePublisher() {
         width: 250,
         height: 200,
         mirror: false,
+
         // publishAudio: false,
         style: {
           buttonDisplayMode: 'off',

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let API_URL = `http://localhost:5000`;
+let API_URL = process.env.REACT_APP_API_URL_DEVELOPMENT;
 if (process.env.NODE_ENV === 'production') {
   API_URL = `${process.env.REACT_APP_API_URL_PRODUCTION}`;
 }
